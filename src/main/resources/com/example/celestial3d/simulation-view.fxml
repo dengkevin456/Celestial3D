@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.SubScene?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Region?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.celestial3d.SimulationController">
+    <top>
+        <MenuBar fx:id="menuBar" blendMode="DARKEN" BorderPane.alignment="TOP_CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="_File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Close" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="_Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="_Camera">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#resetToOrigin" text="Reset to origin" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="_View">
+                    <items>
+                        <CheckMenuItem fx:id="fullScreenCheck" mnemonicParsing="false" onAction="#setFullScreen" selected="true" text="Full Screen" />
+                    </items>
+                </Menu>
+            <Menu mnemonicParsing="false" text="_Instructions">
+              <items>
+                  <MenuItem mnemonicParsing="false" onAction="#instructionWindow" text="Instructions" />
+              </items>
+            </Menu>
+                <Menu mnemonicParsing="false" text="_Window">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#planetCreationWindow" text="Celestial creator" />
+                  <MenuItem mnemonicParsing="false" onAction="#skyBoxColorPickerWindow" text="Skybox color picker" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="_Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <opaqueInsets>
+        <Insets />
+    </opaqueInsets>
+    <center>
+        <SubScene height="774.0" width="701.0" BorderPane.alignment="TOP_CENTER">
+            <root>
+                <Region />
+            </root>
+        </SubScene>
+    </center>
+</BorderPane>
