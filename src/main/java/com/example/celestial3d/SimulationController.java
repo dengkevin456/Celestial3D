@@ -1,7 +1,7 @@
 package com.example.celestial3d;
 
+import com.example.celestial3d.windows.CelestialBodyConfigurationWindow;
 import com.example.celestial3d.windows.InstructionWindow;
-import com.example.celestial3d.windows.PlanetCreationWindow;
 import com.example.celestial3d.windows.SkyboxColorPicker;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -162,6 +162,6 @@ public class SimulationController {
     }
 
     public void planetCreationWindow(ActionEvent event) {
-        leftVerticalWindow.setWindow(new PlanetCreationWindow());
+        leftVerticalWindow.setWindow(new CelestialBodyConfigurationWindow());
     }
 }

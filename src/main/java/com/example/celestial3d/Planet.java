@@ -59,6 +59,12 @@ public class Planet {
         this.addPointLight();
     }
 
+    public void setColor(Color color) {
+        if (this.imovable) return;
+        PhongMaterial material = new PhongMaterial(Color.rgb(255, 255,255));
+        material.setDiffuseColor(color);
+    }
+
     public void process() {
         if (!this.imovable) {
             for (Planet planet: planets) {
