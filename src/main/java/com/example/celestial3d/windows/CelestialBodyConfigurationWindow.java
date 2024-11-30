@@ -1,15 +1,18 @@
 package com.example.celestial3d.windows;
 
-import com.example.celestial3d.Constants;
-import com.example.celestial3d.Planet;
-import com.example.celestial3d.SimulationSingleton;
+import com.example.celestial3d.*;
 import com.example.celestial3d.controls.NumberTextField;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.effect.InnerShadow;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -18,13 +21,17 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
 
 public class CelestialBodyConfigurationWindow extends TabPane {
-    private static final Font titleFont = new Font(SimulationSingleton.getInstance().globalFontName, 40);
-    private static final Font descriptiveFont = new Font(SimulationSingleton.getInstance().globalFontName, 30);
-
-    public CelestialBodyConfigurationWindow() {
-        getTabs().addAll(generateCreationTab());
+    private static final Font titleFont = new Font(SimulationSingleton.getInstance().globalFontName, 35);
+    private static final Font descriptiveFont = new Font(SimulationSingleton.getInstance().globalFontName, 25);
+    private FirstPersonCamera firstPersonCamera;
+    public CelestialBodyConfigurationWindow(FirstPersonCamera firstPersonCamera) {
+        setTabMinWidth(USE_COMPUTED_SIZE);
+        setEffect(new InnerShadow());
+        getTabs().addAll(generateCreationTab(), generateModificationTab(), generateDeletionTab());
+        this.firstPersonCamera = firstPersonCamera;
     }
 
     public Tab generateCreationTab() {
@@ -35,15 +42,49 @@ public class CelestialBodyConfigurationWindow extends TabPane {
         return creationTab;
     }
 
-    private VBox creationContent() {
+    public Tab generateModificationTab() {
+        Tab modificationTab = new Tab("Modification");
+        modificationTab.setClosable(false);
+        modificationTab.setStyle("-fx-font-weight: bold");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("modification-view.fxml"));
+            ScrollPane parent = loader.load();
+            modificationTab.setContent(parent);
+        }
+        catch (IOException e) {
+            modificationTab.setContent(new Label("Unable to generate modification content!"));
+        }
+
+        return modificationTab;
+    }
+
+    public Tab generateDeletionTab() {
+        Tab deletionTab = new Tab("Deletion");
+        deletionTab.setClosable(false);
+        deletionTab.setStyle("-fx-font-weight: bold");
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("deletion-view.fxml"));
+            ScrollPane parent = loader.load();
+            deletionTab.setContent(parent);
+        }
+        catch (IOException e) {
+            deletionTab.setContent(new Label("Unable to generate deletion content!"));
+        }
+        return deletionTab;
+    }
+
+    private ScrollPane creationContent() {
         VBox vbox = new VBox();
+        ScrollPane scrollPane = new ScrollPane(vbox);
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(10);
         Label creationTitle = new Label("Celestial creation wizard");
-        creationTitle.setFont(titleFont);
+        creationTitle.fontProperty().bind(new SimpleObjectProperty<Font>(titleFont));
         creationTitle.setStyle("-fx-font-weight: bold");
 
         GridPane gridPane = new GridPane(10, 10);
+        gridPane.setPadding(new Insets(5));
 
         Label planetName = new Label("Name: ");
         planetName.setFont(descriptiveFont);
@@ -163,7 +204,7 @@ public class CelestialBodyConfigurationWindow extends TabPane {
         });
 
         vbox.getChildren().addAll(creationTitle, gridPane, createButtonLabel, createButton);
-        return vbox;
+        return scrollPane;
     }
 
 

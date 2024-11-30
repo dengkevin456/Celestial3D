@@ -11,7 +11,7 @@ public final class Constants {
         "Planet"
     };
 
-    public static final double G = 0.001;
+    public static final double G = 0.0001;
 
     public static final double MAX_RENDER_DISTANCE = 200;
     public static final double FOV_ANGLE = 45;

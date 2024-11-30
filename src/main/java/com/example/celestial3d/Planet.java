@@ -1,5 +1,6 @@
 package com.example.celestial3d;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.image.Image;
@@ -10,17 +11,115 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 
+import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Planet {
     private Group planetGroup = new Group();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+        sphere.setTranslateX(this.x);
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+        sphere.setTranslateY(this.y);
+    }
+
+    public double getZ() {
+        return z;
+    }
+
+    public void setZ(double z) {
+        this.z = z;
+        sphere.setTranslateZ(this.z);
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public Color getMaterialColor() {
+        if (this.imovable) return Color.WHITE;
+        return planetColor;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+        this.sphere.setRadius(this.radius);
+        PhongMaterial material = new PhongMaterial(Color.rgb(255, 255,255));
+        if (this.imovable) {
+            Image i = new Image("file:skybox_top.png");
+            material.setSelfIlluminationMap(i);
+            material.setDiffuseMap(i);
+
+        }
+        else {
+            material.setDiffuseColor(planetColor);
+        }
+        this.sphere.setMaterial(material);
+    }
+
+    public double getSx() {
+        return sx;
+    }
+
+    public void setSx(double sx) {
+        this.sx = sx;
+    }
+
+    public double getSy() {
+        return sy;
+    }
+
+    public void setSy(double sy) {
+        this.sy = sy;
+    }
+
+    public double getSz() {
+        return sz;
+    }
+
+    public void setSz(double sz) {
+        this.sz = sz;
+    }
+
+    public double getMass() {
+        return mass;
+    }
+
+    public void setMass(double mass) {
+        this.mass = mass;
+    }
+
     private String name;
 
     private Text text = new Text("");
     // private Pane pane = new BorderPane(text);
     private Sphere sphere;
     private double x, y, z, radius, sx, sy, sz, mass;
+    private Color planetColor;
     boolean imovable;
+
+    private Trail planetTrail;
     private List<Planet> planets;
     public Planet(String name, List<Planet> planets, double x, double y, double z, double sx, double sy, double sz, double radius, double mass, boolean imovable) {
         this.name = name;
@@ -35,9 +134,6 @@ public class Planet {
         this.mass = mass;
         this.imovable = imovable;
         this.sphere = new Sphere(this.radius);
-        this.sphere.setTranslateX(this.x);
-        this.sphere.setTranslateY(this.y);
-        this.sphere.setTranslateZ(this.z);
         PhongMaterial material = new PhongMaterial(Color.rgb(255, 255,255));
         if (this.imovable) {
             Image i = new Image("file:skybox_top.png");
@@ -46,23 +142,38 @@ public class Planet {
 
         }
         else {
-            material.setDiffuseColor(Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255),
-                                (int) (Math.random() * 255)));
+            planetColor = Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255),
+                    (int) (Math.random() * 255));
+            material.setDiffuseColor(planetColor);
         }
         this.sphere.setMaterial(material);
 
         this.text.setFont(new Font("Arial", 10));
         this.text.setText(this.name);
         this.text.setFill(Color.WHITE);
-        this.planetGroup.getChildren().addAll(this.sphere, this.text);
+
+        this.planetTrail = new Trail(this.sphere, new ArrayDeque<>());
+        this.planetGroup.getChildren().addAll(this.sphere, this.text, this.planetTrail.getTrailGroup());
 
         this.addPointLight();
+
+
+        sphere.setTranslateX(this.x);
+        sphere.setTranslateY(this.y);
+        sphere.setTranslateZ(this.z);
+    }
+
+    @Override
+    public String toString() {
+        return this.name + ", " + this.mass + "kg";
     }
 
     public void setColor(Color color) {
         if (this.imovable) return;
-        PhongMaterial material = new PhongMaterial(Color.rgb(255, 255,255));
-        material.setDiffuseColor(color);
+        planetColor = color;
+        PhongMaterial material = new PhongMaterial(planetColor);
+        material.setDiffuseColor(planetColor);
+        this.sphere.setMaterial(material);
     }
 
     public void process() {
@@ -72,13 +183,16 @@ public class Planet {
                     double dx = planet.x - this.x;
                     double dy = planet.y - this.y;
                     double dz = planet.z - this.z;
-                    double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                    double distanceSquared = dx * dx + dy * dy + dz * dz;
+                    double distance = Math.sqrt(distanceSquared);
 
                     if (distance < 0.1) {
                         distance = 0.1;
                     }
 
-                    double force = Constants.G  * this.mass * planet.mass / (distance * distance);
+                    double force = Constants.G  * this.mass * planet.mass / distanceSquared;
+                    // Acceleration = F / m
                     double directionX = (planet.x - this.x) * force * distance / this.mass;
                     double directionY = (planet.y - this.y) * force * distance / this.mass;
                     double directionZ = (planet.z - this.z) * force * distance / this.mass;
@@ -91,9 +205,12 @@ public class Planet {
             this.x += this.sx;
             this.y += this.sy;
             this.z += this.sz;
+
             sphere.setTranslateX(this.x);
             sphere.setTranslateY(this.y);
             sphere.setTranslateZ(this.z);
+
+            planetTrail.updateMovement();
         }
     }
 
@@ -103,6 +220,9 @@ public class Planet {
         pointLight.setTranslateX(this.x);
         pointLight.setTranslateY(this.y);
         pointLight.setTranslateZ(this.z);
+        pointLight.translateXProperty().bind(new SimpleDoubleProperty(this.x));
+        pointLight.translateYProperty().bind(new SimpleDoubleProperty(this.y));
+        pointLight.translateZProperty().bind(new SimpleDoubleProperty(this.z));
         this.planetGroup.getChildren().add(pointLight);
     }
 

@@ -41,7 +41,8 @@
                 <Menu mnemonicParsing="false" text="_Window">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#planetCreationWindow" text="Celestial creator" />
-                  <MenuItem mnemonicParsing="false" onAction="#skyBoxColorPickerWindow" text="Skybox color picker" />
+                        <MenuItem mnemonicParsing="false" onAction="#skyBoxColorPickerWindow" text="Skybox color picker" />
+                        <MenuItem mnemonicParsing="false" onAction="#forceDistanceChartWindow" text="Force/Distance Chart" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="_Help">

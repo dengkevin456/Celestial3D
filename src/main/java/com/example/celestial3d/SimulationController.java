@@ -162,6 +162,10 @@ public class SimulationController {
     }
 
     public void planetCreationWindow(ActionEvent event) {
-        leftVerticalWindow.setWindow(new CelestialBodyConfigurationWindow());
+        leftVerticalWindow.setWindow(new CelestialBodyConfigurationWindow(firstPersonCamera));
+    }
+
+    public void forceDistanceChartWindow(ActionEvent event) {
+
     }
 }

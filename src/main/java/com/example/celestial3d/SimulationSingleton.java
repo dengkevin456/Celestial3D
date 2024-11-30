@@ -1,6 +1,8 @@
 package com.example.celestial3d;
 
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
 
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ public class SimulationSingleton {
     public DoubleProperty skyboxGreen = new SimpleDoubleProperty(0);
     public DoubleProperty skyboxBlue = new SimpleDoubleProperty(0);
 
-    public List<Planet> planetList = new ArrayList<>();
+    public ObservableList<Planet> planetList = FXCollections.observableList(new ArrayList<>());
 
     public String globalFontName = "Sen";
 
