@@ -8,19 +8,14 @@ import javafx.scene.shape.*;
 public class SimulationSpace extends Group {
 
 
-    private double spacing;
-    private int count;
-    private final PhongMaterial MATERIAL = new PhongMaterial(Color.GRAY);
-
     public SimulationSpace() {
         getChildren().add(create3DCoordinateGrid(10, 20));
     }
 
     private Group create3DCoordinateGrid(int gridCount, double spacing) {
         Group grid = new Group();
-
         // Create material for the grid cylinders
-        PhongMaterial grayMaterial = new PhongMaterial(Color.WHITE);
+        PhongMaterial grayMaterial = new PhongMaterial(Color.GRAY);
 
         // Create grid cells for XZ plane (Y = 0)
         for (int i = -gridCount; i <= gridCount; i++) {

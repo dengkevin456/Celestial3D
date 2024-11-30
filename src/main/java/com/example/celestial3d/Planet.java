@@ -3,6 +3,10 @@ package com.example.celestial3d;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
+import javafx.scene.effect.MotionBlur;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -11,9 +15,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class Planet {
     private Group planetGroup = new Group();
@@ -67,14 +74,39 @@ public class Planet {
         this.sphere.setRadius(this.radius);
         PhongMaterial material = new PhongMaterial(Color.rgb(255, 255,255));
         if (this.imovable) {
-            Image i = new Image("file:skybox_top.png");
-            material.setSelfIlluminationMap(i);
-            material.setDiffuseMap(i);
-
+            if (this.texturePath == null) {
+                setDefaultTexture();
+            }
+            else {
+                Image i = new Image("file:" + this.texturePath);
+                material.setSelfIlluminationMap(i);
+                material.setDiffuseMap(i);
+                this.sphere.setMaterial(material);
+            }
         }
         else {
             material.setDiffuseColor(planetColor);
+            this.sphere.setMaterial(material);
         }
+    }
+
+    public void setDefaultTexture() {
+        if (!this.imovable) return;
+        PhongMaterial material = new PhongMaterial(Color.rgb(255, 255, 255));
+        this.texturePath = null;
+        Image i = new Image(Objects.requireNonNull(
+                Launcher.class.getResource(Constants.DEFAULT_TEXTURE_PATH)).toExternalForm());
+        material.setSelfIlluminationMap(i);
+        material.setDiffuseMap(i);
+        this.sphere.setMaterial(material);
+    }
+    public void setTexture(String textureLink) {
+        if (!this.imovable) return;
+        PhongMaterial material = new PhongMaterial(Color.rgb(255, 255,255));
+        this.texturePath = textureLink;
+        Image i = new Image("file:" + this.texturePath);
+        material.setSelfIlluminationMap(i);
+        material.setDiffuseMap(i);
         this.sphere.setMaterial(material);
     }
 
@@ -118,6 +150,7 @@ public class Planet {
     private double x, y, z, radius, sx, sy, sz, mass;
     private Color planetColor;
     boolean imovable;
+    String texturePath = null;
 
     private Trail planetTrail;
     private List<Planet> planets;
@@ -136,7 +169,7 @@ public class Planet {
         this.sphere = new Sphere(this.radius);
         PhongMaterial material = new PhongMaterial(Color.rgb(255, 255,255));
         if (this.imovable) {
-            Image i = new Image("file:skybox_top.png");
+            Image i = new Image(Objects.requireNonNull(Launcher.class.getResource(Constants.DEFAULT_TEXTURE_PATH)).toExternalForm());
             material.setSelfIlluminationMap(i);
             material.setDiffuseMap(i);
 
@@ -151,6 +184,15 @@ public class Planet {
         this.text.setFont(new Font("Arial", 10));
         this.text.setText(this.name);
         this.text.setFill(Color.WHITE);
+
+        DropShadow glow = new DropShadow();
+        glow.setOffsetX(0);
+        glow.setOffsetY(0);
+        glow.setRadius(10);
+        glow.setSpread(0.7);
+        glow.setColor(Color.LIMEGREEN);
+        this.text.setEffect(glow);
+
 
         this.planetTrail = new Trail(this.sphere, new ArrayDeque<>());
         this.planetGroup.getChildren().addAll(this.sphere, this.text, this.planetTrail.getTrailGroup());
@@ -210,10 +252,15 @@ public class Planet {
             sphere.setTranslateY(this.y);
             sphere.setTranslateZ(this.z);
 
-            planetTrail.updateMovement();
+            if (SimulationSingleton.getInstance().enableTrailVisualizer.getValue())
+                planetTrail.updateMovement();
+            else planetTrail.getTrailGroup().getChildren().clear();
         }
     }
-
+    public double getAcceleration() {
+        if (this.imovable) return 0;
+        return (this.sx * this.sx + this.sy * this.sy + this.sz * this.sz) / this.radius;
+    }
     public void addPointLight() {
         if (!this.imovable) return;
         PointLight pointLight = new PointLight(Color.WHITE);

@@ -16,6 +16,6 @@ public final class Constants {
     public static final double FOV_ANGLE = 45;
     public static final double SCALE = 1e-9;
 
-    public static final String DEFAULT_TEXTURE_PATH = "file:skybox_top.png";
+    public static final String DEFAULT_TEXTURE_PATH = "images/skybox_top.png";
     public static final String YELLOW = "\033[0;33m";
 }

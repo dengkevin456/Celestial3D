@@ -91,6 +91,7 @@ public class FirstPersonCamera {
 
     public FirstPersonCamera(PerspectiveCamera camera) {
         this.camera = camera;
+        this.camera.fieldOfViewProperty().bindBidirectional(SimulationSingleton.getInstance().cameraFOV);
         pitchRotate = new Rotate(0, Rotate.X_AXIS);
         yawRotate = new Rotate(0, Rotate.Y_AXIS);
 

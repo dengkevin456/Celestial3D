@@ -12,6 +12,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.InnerShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -22,10 +24,16 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class CelestialBodyConfigurationWindow extends TabPane {
     private static final Font titleFont = new Font(SimulationSingleton.getInstance().globalFontName, 35);
     private static final Font descriptiveFont = new Font(SimulationSingleton.getInstance().globalFontName, 25);
+
+    private static String texturePath = null;
     private FirstPersonCamera firstPersonCamera;
     public CelestialBodyConfigurationWindow(FirstPersonCamera firstPersonCamera) {
         setTabMinWidth(USE_COMPUTED_SIZE);
@@ -137,23 +145,33 @@ public class CelestialBodyConfigurationWindow extends TabPane {
         ColorPicker picker = new ColorPicker(Color.BLACK);
 
         Label textureLabel = new Label("Texture: ");
-        String texturePath = Constants.DEFAULT_TEXTURE_PATH;
         FileChooser fileDialog = new FileChooser();
         Button selectFileButton = new Button("Select file...");
+        ImageView texturePreview = new ImageView();
+        texturePreview.setPreserveRatio(true);
+        texturePreview.setFitWidth(100);
+        texturePreview.setFitHeight(100);
+
 
         selectFileButton.setOnAction(event -> {
-            fileDialog.showOpenDialog(selectFileButton.getScene().getWindow());
+            File selectedFile = fileDialog.showOpenDialog(selectFileButton.getScene().getWindow());
+            if (selectedFile != null) {
+                selectFileButton.setText(selectedFile.getName());
+                texturePath = selectedFile.getAbsolutePath();
+                texturePreview.setImage(new Image("file:" + selectedFile.getAbsolutePath()));
+            }
+            else {
+                selectFileButton.setText("Select File...");
+                texturePath = null;
+                texturePreview.setImage(null);
+            }
         });
 
         fileDialog.setTitle("Select Texture...");
         fileDialog.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PNG files", "*.png"),
-                new FileChooser.ExtensionFilter("JPG files", "*.jpg")
+                new FileChooser.ExtensionFilter("Images files", "*.png", "*.jpg")
         );
-        FileChooser.ExtensionFilter filter = fileDialog.getSelectedExtensionFilter();
-        if (filter != null) {
-            selectFileButton.setText(filter.getDescription());
-        }
+
 
         CheckBox isStatic = new CheckBox("Is celestial static?");
 
@@ -170,7 +188,7 @@ public class CelestialBodyConfigurationWindow extends TabPane {
         gridPane.addRow(4, yLabel, yField);
         gridPane.addRow(5, zLabel, zField);
         gridPane.addRow(6, celestialColor, picker);
-        gridPane.addRow(7, textureLabel, selectFileButton);
+        gridPane.addRow(7, textureLabel, selectFileButton, texturePreview);
         gridPane.addRow(8, sxLabel, sxField);
         gridPane.addRow(9, syLabel, syField);
         gridPane.addRow(10, szLabel, szField);
@@ -180,6 +198,7 @@ public class CelestialBodyConfigurationWindow extends TabPane {
         createButton.setFont(descriptiveFont);
 
         Label createButtonLabel = new Label("Please fill in all the labels correctly (respect the size!)");
+        createButtonLabel.setVisible(false);
         createButtonLabel.setFont(new Font(SimulationSingleton.getInstance().globalFontName, 12));
         createButtonLabel.setStyle("-fx-text-fill: rgb(255, 0, 0)");
 
@@ -190,7 +209,6 @@ public class CelestialBodyConfigurationWindow extends TabPane {
         celestialColor.disableProperty().bind(isStatic.selectedProperty());
         picker.disableProperty().bind(isStatic.selectedProperty());
 
-        createButtonLabel.visibleProperty().bind(createButton.disabledProperty());
 
         createButton.disableProperty().bind(
                 textFieldInvalid(nameField, 6).or(
@@ -199,16 +217,36 @@ public class CelestialBodyConfigurationWindow extends TabPane {
         );
 
         createButton.setOnAction(event -> {
-            Planet celestialBody = new Planet(nameField.textProperty().getValue(), SimulationSingleton.getInstance().planetList,
-                    Double.parseDouble(xField.getText()), Double.parseDouble(yField.getText()), Double.parseDouble(zField.getText()),
-                    Double.parseDouble(sxField.getText()), Double.parseDouble(syField.getText()),
-                    Double.parseDouble(szField.getText()), Double.parseDouble(planetSizeInput.getText()),
-                    Double.parseDouble(planetMassInput.getText()), isStatic.isSelected());
-            celestialBody.setColor(picker.getValue());
-            SimulationSingleton.getInstance().planetList.add(
-                    celestialBody
-            );
-            SimulationSingleton.getInstance().group.getChildren().add(SimulationSingleton.getInstance().planetList.getLast().getSphereGroup());
+            try {
+                Planet celestialBody = new Planet(nameField.textProperty().getValue(), SimulationSingleton.getInstance().planetList,
+                        Double.parseDouble(xField.getText()), Double.parseDouble(yField.getText()), Double.parseDouble(zField.getText()),
+                        Double.parseDouble(!isStatic.isSelected() ? sxField.getText() : "0"),
+                        Double.parseDouble(!isStatic.isSelected() ? syField.getText() : "0"),
+                        Double.parseDouble(!isStatic.isSelected() ? szField.getText() : "0"), Double.parseDouble(planetSizeInput.getText()),
+                        Double.parseDouble(planetMassInput.getText()), isStatic.isSelected());
+                if (!isStatic.isSelected())
+                    celestialBody.setColor(picker.getValue());
+                else {
+                    if (texturePath == null) {
+                        celestialBody.setDefaultTexture();
+                    }
+                    else {
+                        celestialBody.setTexture(texturePath);
+                    }
+                }
+                SimulationSingleton.getInstance().planetList.add(
+                        celestialBody
+                );
+                SimulationSingleton.getInstance().group.getChildren().add(SimulationSingleton.getInstance().planetList.getLast().getSphereGroup());
+                createButtonLabel.setVisible(true);
+                createButtonLabel.setStyle("-fx-text-fill: green");
+                createButtonLabel.setText("Success!");
+            }
+            catch (NumberFormatException e) {
+                createButtonLabel.setVisible(true);
+                createButtonLabel.setStyle("-fx-text-fill: red");
+                createButtonLabel.setText("Please ensure that everything is filled properly.");
+            }
         });
 
         useCameraPositionButton.setOnAction(event -> {
@@ -220,7 +258,6 @@ public class CelestialBodyConfigurationWindow extends TabPane {
         vbox.getChildren().addAll(creationTitle, gridPane, createButtonLabel, createButton);
         return scrollPane;
     }
-
 
     private static BooleanBinding textFieldInvalid(TextField field, int length) {
         return Bindings.isEmpty(field.textProperty()).or(Bindings.lessThan(length, field.textProperty().length()));

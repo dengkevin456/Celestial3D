@@ -20,11 +20,20 @@ public class SimulationSingleton {
 
     public String globalFontName = "Sen";
 
-    public final Group group = new Group(new SimulationSpace());
+    private static final SimulationSpace space = new SimulationSpace();
+    public final Group group = new Group(space);
+
+
+    // Global settings
+    public BooleanProperty enableTrailVisualizer = new SimpleBooleanProperty(true);
+    public BooleanProperty enableCartesianPlane = new SimpleBooleanProperty(true);
+
+    public DoubleProperty cameraFOV = new SimpleDoubleProperty(60);
     private SimulationSingleton() {}
     public static SimulationSingleton getInstance() {
         if (instance == null) {
             instance = new SimulationSingleton();
+            space.visibleProperty().bind(instance.enableCartesianPlane);
         }
         return instance;
     }

@@ -171,6 +171,10 @@ public class SimulationController {
         leftVerticalWindow.setWindow(getAboutWindow());
     }
 
+    public void settingsWindow(ActionEvent event) {
+        rightVerticalWindow.setWindow(getSettingsWindow());
+    }
+
     private ScrollPane getAboutWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("about-view.fxml"));
@@ -181,7 +185,27 @@ public class SimulationController {
         }
     }
 
-    public void forceDistanceChartWindow(ActionEvent event) {
+    public void accelerationTimeWindow(ActionEvent event) {
+        rightVerticalWindow.setWindow(getAccelerationTimeWindow());
+    }
 
+    public ScrollPane getAccelerationTimeWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("acceleration-view.fxml"));
+            return loader.load();
+        }
+        catch (IOException e) {
+            return new ScrollPane(new Label("The accel-time window doesn't exist."));
+        }
+    }
+
+    public ScrollPane getSettingsWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("settings.fxml"));
+            return loader.load();
+        }
+        catch (IOException e) {
+            return new ScrollPane(new Label("The settings window doesn't exist."));
+        }
     }
 }

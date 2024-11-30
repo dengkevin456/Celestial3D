@@ -16,7 +16,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class InstructionWindow extends TabPane {
-    private static final Font titleFont = new Font(SimulationSingleton.getInstance().globalFontName, 80);
     private static final Font descriptiveFont = new Font(SimulationSingleton.getInstance().globalFontName, 20);
 
     public static Map<String, String[]> generalInstructions = Map.ofEntries(
