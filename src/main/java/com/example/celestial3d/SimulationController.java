@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -87,10 +88,10 @@ public class SimulationController {
     public void initialize() {
         subScene = new SubScene(SimulationSingleton.getInstance().group, 800, 800, true, SceneAntialiasing.BALANCED);
         borderPaneSetup();
-        subScene.fillProperty().bind(Bindings.createObjectBinding(() ->
-                Color.rgb(SimulationSingleton.getInstance().skyboxRED.intValue(),
-                        SimulationSingleton.getInstance().skyboxGreen.intValue(), SimulationSingleton.getInstance().skyboxBlue.intValue()),
-                SimulationSingleton.getInstance().skyboxRED, SimulationSingleton.getInstance().skyboxGreen, SimulationSingleton.getInstance().skyboxBlue));
+        subScene.setFill(Color.BLACK);
+        SimulationSingleton.getInstance().skyboxColor.addListener((observable, oldValue, newValue) -> {
+            subScene.setFill(newValue);
+        });
 
         SimulationSingleton instance = SimulationSingleton.getInstance();
         

@@ -4,6 +4,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,8 @@ public class SimulationSingleton {
     private static SimulationSingleton instance;
 
     public BooleanProperty fullScreenProperty = new SimpleBooleanProperty(true);
-    public IntegerProperty skyboxRED = new SimpleIntegerProperty(0);
-    public DoubleProperty skyboxGreen = new SimpleDoubleProperty(0);
-    public DoubleProperty skyboxBlue = new SimpleDoubleProperty(0);
+
+    public ObjectProperty<Color> skyboxColor = new SimpleObjectProperty<>(Color.BLACK);
 
     public ObservableList<Planet> planetList = FXCollections.observableList(new ArrayList<>());
 
