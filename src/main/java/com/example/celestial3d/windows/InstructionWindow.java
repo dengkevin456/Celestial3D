@@ -20,9 +20,6 @@ public class InstructionWindow extends TabPane {
     private static final Font descriptiveFont = new Font(SimulationSingleton.getInstance().globalFontName, 20);
 
     public static Map<String, String[]> generalInstructions = Map.ofEntries(
-            Map.entry("Instructions", new String[] {
-                "INSTRUCTIONS",
-            }),
             Map.entry("Camera", new String[] {
                 "Use WASD to move",
                     "Use Q/E to move camera down or up",

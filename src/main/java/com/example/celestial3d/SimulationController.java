@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.*;
@@ -22,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +54,7 @@ public class SimulationController {
 
     private VerticalWindow rightVerticalWindow = new VerticalWindow(new InstructionWindow(Constants.TAB_STRINGS));
 
-    private VerticalWindow leftVerticalWindow = new VerticalWindow();
+    private VerticalWindow leftVerticalWindow = new VerticalWindow(getAboutWindow());
 
 
     public SimulationController() {}
@@ -163,6 +165,20 @@ public class SimulationController {
 
     public void planetCreationWindow(ActionEvent event) {
         leftVerticalWindow.setWindow(new CelestialBodyConfigurationWindow(firstPersonCamera));
+    }
+
+    public void aboutWindow(ActionEvent event) {
+        leftVerticalWindow.setWindow(getAboutWindow());
+    }
+
+    private ScrollPane getAboutWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("about-view.fxml"));
+            return loader.load();
+        }
+        catch (IOException e) {
+            return new ScrollPane(new Label("The about window doesn't exist."));
+        }
     }
 
     public void forceDistanceChartWindow(ActionEvent event) {

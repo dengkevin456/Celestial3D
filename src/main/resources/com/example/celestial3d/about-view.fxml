@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21">
+   <content>
+      <VBox alignment="TOP_CENTER" maxWidth="-Infinity" spacing="10.0">
+         <children>
+            <Label text="About">
+               <font>
+                  <Font size="41.0" />
+               </font>
+            </Label>
+            <Label text="- 3D planet simulator">
+               <font>
+                  <Font name="Arial Black" size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="15.0" layoutY="84.0" maxWidth="200.0" text="- Made by Kevin Deng, Kamran Hassan, and Julian Riccardi." wrapText="true">
+               <font>
+                  <Font name="Arial Black" size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="15.0" layoutY="114.0" maxWidth="200.0" text="- Goal: simulate newtonian mechanics of gravitational attraction in three dimensions." wrapText="true">
+               <font>
+                  <Font name="Arial Black" size="13.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
+   </content>
+</ScrollPane>

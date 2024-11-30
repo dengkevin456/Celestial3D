@@ -94,15 +94,19 @@ public class CelestialBodyConfigurationWindow extends TabPane {
         planetSizeLabel.setFont(descriptiveFont);
         NumberTextField planetSizeInput = new NumberTextField();
 
+        Label planetMassLabel = new Label("Mass: ");
+        planetMassLabel.setFont(descriptiveFont);
+        NumberTextField planetMassInput = new NumberTextField();
+
         Button useCameraPositionButton = new Button("Use camera position");
 
         Label xLabel = new Label("Pos X: ");
         Label yLabel = new Label("Pos Y: ");
         Label zLabel = new Label("Pos Z: ");
 
-        NumberTextField xField = new NumberTextField();
-        NumberTextField yField = new NumberTextField();
-        NumberTextField zField = new NumberTextField();
+        NumberTextField xField = new NumberTextField(true);
+        NumberTextField yField = new NumberTextField(true);
+        NumberTextField zField = new NumberTextField(true);
 
         final int MAX_SIZE = 60;
         xField.setMaxSize(MAX_SIZE, 20);
@@ -112,9 +116,9 @@ public class CelestialBodyConfigurationWindow extends TabPane {
         zField.setMaxSize(MAX_SIZE, 20);
         zField.setPrefWidth(MAX_SIZE);
 
-        NumberTextField sxField = new NumberTextField();
-        NumberTextField syField = new NumberTextField();
-        NumberTextField szField = new NumberTextField();
+        NumberTextField sxField = new NumberTextField(true);
+        NumberTextField syField = new NumberTextField(true);
+        NumberTextField szField = new NumberTextField(true);
 
         Label sxLabel = new Label("Speed X: ");
         Label syLabel = new Label("Speed Y: ");
@@ -160,16 +164,17 @@ public class CelestialBodyConfigurationWindow extends TabPane {
 
         gridPane.add(planetSizeLabel, 0, 1);
         gridPane.add(planetSizeInput, 1, 1);
+        gridPane.addRow(2, planetMassLabel, planetMassInput);
 
-        gridPane.addRow(2, xLabel, xField, useCameraPositionButton);
-        gridPane.addRow(3, yLabel, yField);
-        gridPane.addRow(4, zLabel, zField);
-        gridPane.addRow(5, celestialColor, picker);
-        gridPane.addRow(6, textureLabel, selectFileButton);
-        gridPane.addRow(7, sxLabel, sxField);
-        gridPane.addRow(8, syLabel, syField);
-        gridPane.addRow(9, szLabel, szField);
-        gridPane.addRow(10, isStatic);
+        gridPane.addRow(3, xLabel, xField, useCameraPositionButton);
+        gridPane.addRow(4, yLabel, yField);
+        gridPane.addRow(5, zLabel, zField);
+        gridPane.addRow(6, celestialColor, picker);
+        gridPane.addRow(7, textureLabel, selectFileButton);
+        gridPane.addRow(8, sxLabel, sxField);
+        gridPane.addRow(9, syLabel, syField);
+        gridPane.addRow(10, szLabel, szField);
+        gridPane.addRow(11, isStatic);
 
         Button createButton = new Button("Create celestial body");
         createButton.setFont(descriptiveFont);
@@ -194,13 +199,22 @@ public class CelestialBodyConfigurationWindow extends TabPane {
         );
 
         createButton.setOnAction(event -> {
-            Planet celestialBody = new Planet(nameField.textProperty().getValue(), SimulationSingleton.getInstance().planetList, 300, 0, 0,
-                    -1, -1, 2, 10, 25, isStatic.isSelected());
+            Planet celestialBody = new Planet(nameField.textProperty().getValue(), SimulationSingleton.getInstance().planetList,
+                    Double.parseDouble(xField.getText()), Double.parseDouble(yField.getText()), Double.parseDouble(zField.getText()),
+                    Double.parseDouble(sxField.getText()), Double.parseDouble(syField.getText()),
+                    Double.parseDouble(szField.getText()), Double.parseDouble(planetSizeInput.getText()),
+                    Double.parseDouble(planetMassInput.getText()), isStatic.isSelected());
             celestialBody.setColor(picker.getValue());
             SimulationSingleton.getInstance().planetList.add(
                     celestialBody
             );
             SimulationSingleton.getInstance().group.getChildren().add(SimulationSingleton.getInstance().planetList.getLast().getSphereGroup());
+        });
+
+        useCameraPositionButton.setOnAction(event -> {
+            xField.setText((int) this.firstPersonCamera.getCameraX() + "");
+            yField.setText((int) this.firstPersonCamera.getCameraY() + "");
+            zField.setText((int) this.firstPersonCamera.getCameraZ() + "");
         });
 
         vbox.getChildren().addAll(creationTitle, gridPane, createButtonLabel, createButton);
