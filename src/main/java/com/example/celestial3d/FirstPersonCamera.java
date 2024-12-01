@@ -266,6 +266,37 @@ public class FirstPersonCamera {
         movementSpeed = oSpeed;
     }
 
+    public void goToPosition(double x, double y, double z) {
+        DoubleProperty dbX = new SimpleDoubleProperty(this.cameraX);
+        DoubleProperty dbY = new SimpleDoubleProperty(this.cameraY);
+        DoubleProperty dbZ = new SimpleDoubleProperty(this.cameraZ);
+        KeyFrame keyFrameX = new KeyFrame(Duration.seconds(1.5), new KeyValue(dbX, x, Interpolator.EASE_OUT));
+        KeyFrame keyFrameY = new KeyFrame(Duration.seconds(1.5), new KeyValue(dbY, y, Interpolator.EASE_OUT));
+        KeyFrame keyFrameZ = new KeyFrame(Duration.seconds(1.5), new KeyValue(dbZ, z, Interpolator.EASE_OUT));
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(dbX, this.cameraX), new KeyValue(dbY, this.cameraY),
+                        new KeyValue(dbZ, this.cameraZ)),
+                keyFrameX,
+                keyFrameY,
+                keyFrameZ
+        );
+        dbX.addListener((obs, oldVal, newVal) -> {
+            this.cameraX = dbX.doubleValue();
+        });
+        dbY.addListener((obs, oldVal, newVal) -> {
+            this.cameraY = dbY.doubleValue();
+        });
+
+        dbZ.addListener((obs, oldVal, newVal) -> {
+            this.cameraZ = dbZ.doubleValue();
+            camera.getTransforms().removeIf(t -> t instanceof Translate);
+            camera.getTransforms().add(
+                    new Translate(cameraX, cameraY, cameraZ));
+        });
+        timeline.play();
+    }
+
     public void resetToOrigin() {
         DoubleProperty dbX = new SimpleDoubleProperty(this.cameraX);
         DoubleProperty dbY = new SimpleDoubleProperty(this.cameraY);

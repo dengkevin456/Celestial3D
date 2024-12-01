@@ -1,6 +1,7 @@
 package com.example.celestial3d;
 
 import com.example.celestial3d.windows.CelestialBodyConfigurationWindow;
+import com.example.celestial3d.windows.CelestialBodyInformationWindow;
 import com.example.celestial3d.windows.InstructionWindow;
 import com.example.celestial3d.windows.SkyboxColorPicker;
 import javafx.animation.AnimationTimer;
@@ -208,5 +209,9 @@ public class SimulationController {
         catch (IOException e) {
             return new ScrollPane(new Label("The settings window doesn't exist."));
         }
+    }
+
+    public void celestialBodyInformationWindow(ActionEvent event) {
+        leftVerticalWindow.setWindow(new CelestialBodyInformationWindow(firstPersonCamera));
     }
 }

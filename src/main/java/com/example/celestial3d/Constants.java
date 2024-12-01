@@ -7,7 +7,9 @@ public final class Constants {
 
     public static final String[] TAB_STRINGS = {
         "Camera",
-        "Planet"
+        "Celestial configuration",
+            "Celestial information",
+            "General settings"
     };
 
     public static final double G = 0.0001;

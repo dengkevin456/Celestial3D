@@ -40,9 +40,14 @@
             </Menu>
                 <Menu mnemonicParsing="false" text="_Window">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#planetCreationWindow" text="Celestial creator" />
+                  <Menu mnemonicParsing="false" text="Celestials">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#celestialBodyInformationWindow" text="Celestial information" />
+                              <MenuItem mnemonicParsing="false" onAction="#planetCreationWindow" text="Celestial configuration" />
+                    </items>
+                  </Menu>
                         <MenuItem mnemonicParsing="false" onAction="#skyBoxColorPickerWindow" text="Skybox color picker" />
-                        <MenuItem mnemonicParsing="false" onAction="#accelerationTimeWindow" text="Force/Distance Chart" />
+                        <MenuItem mnemonicParsing="false" onAction="#accelerationTimeWindow" text="Acceleration/Time Graph" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="_Help">

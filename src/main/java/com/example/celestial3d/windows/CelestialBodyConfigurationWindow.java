@@ -28,7 +28,7 @@ public class CelestialBodyConfigurationWindow extends TabPane {
     private static String texturePath = null;
     private FirstPersonCamera firstPersonCamera;
     public CelestialBodyConfigurationWindow(FirstPersonCamera firstPersonCamera) {
-        setTabMinWidth(USE_COMPUTED_SIZE);
+        setTabMaxHeight(1000);
         setEffect(new InnerShadow());
         getTabs().addAll(generateCreationTab(), generateModificationTab(), generateDeletionTab());
         this.firstPersonCamera = firstPersonCamera;
@@ -77,6 +77,7 @@ public class CelestialBodyConfigurationWindow extends TabPane {
     private ScrollPane creationContent() {
         VBox vbox = new VBox();
         ScrollPane scrollPane = new ScrollPane(vbox);
+        scrollPane.setMaxHeight(600);
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(10);
         Label creationTitle = new Label("Celestial creation wizard");

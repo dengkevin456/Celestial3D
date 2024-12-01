@@ -4,8 +4,10 @@ import javafx.application.Application;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -42,10 +44,17 @@ public class HelloApplication extends Application {
         });
 
 
-        // TODO: Fix the full screen issue
+
 
 
         stage.setTitle("JavaFX simulation");
+        Rectangle2D bounds = Screen.getPrimary().getBounds();
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth());
+        stage.setHeight(bounds.getHeight());
+        stage.setMaxWidth(bounds.getWidth() * 2);
+        stage.setMaxHeight(bounds.getHeight());
         stage.setScene(scene);
         stage.setFullScreen(SimulationSingleton.getInstance().fullScreenProperty.getValue());
         stage.fullScreenProperty().addListener((obs, oldValue, newValue) -> {

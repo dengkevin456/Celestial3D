@@ -1,6 +1,9 @@
 package com.example.celestial3d;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleMapProperty;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.effect.Bloom;
@@ -151,7 +154,6 @@ public class Planet {
     private Color planetColor;
     boolean imovable;
     String texturePath = null;
-
     private Trail planetTrail;
     private List<Planet> planets;
     public Planet(String name, List<Planet> planets, double x, double y, double z, double sx, double sy, double sz, double radius, double mass, boolean imovable) {
@@ -257,9 +259,9 @@ public class Planet {
             else planetTrail.getTrailGroup().getChildren().clear();
         }
     }
-    public double getAcceleration() {
+    public double getVelocitySquared() {
         if (this.imovable) return 0;
-        return (this.sx * this.sx + this.sy * this.sy + this.sz * this.sz) / this.radius;
+        return (this.sx * this.sx + this.sy * this.sy + this.sz * this.sz);
     }
     public void addPointLight() {
         if (!this.imovable) return;
