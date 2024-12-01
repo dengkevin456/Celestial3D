@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.celestial3d.SettingsController">
    <content>
       <VBox alignment="TOP_CENTER" spacing="10.0">
@@ -37,6 +36,12 @@
                <VBox.margin>
                   <Insets />
                </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="20.0" layoutY="113.0" spacing="5.0">
+               <children>
+                  <Label text="Gravity Scale" />
+                  <Slider fx:id="gravityScaleSlider" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" min="1.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
+               </children>
             </HBox>
          </children>
          <padding>

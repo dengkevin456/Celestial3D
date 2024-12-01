@@ -7,7 +7,6 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SimulationSingleton {
     private static SimulationSingleton instance;

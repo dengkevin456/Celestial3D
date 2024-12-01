@@ -6,7 +6,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
-import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class Trail {

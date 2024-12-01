@@ -4,21 +4,15 @@ import com.example.celestial3d.FirstPersonCamera;
 import com.example.celestial3d.Planet;
 import com.example.celestial3d.SimulationSingleton;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-
-import java.util.Objects;
 
 public class CelestialBodyInformationWindow extends ScrollPane {
     private static final Font titleFont = new Font(SimulationSingleton.getInstance().globalFontName, 35);

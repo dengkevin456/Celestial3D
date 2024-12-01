@@ -1,18 +1,12 @@
 package com.example.celestial3d.windows;
 
-import com.example.celestial3d.Constants;
 import com.example.celestial3d.SimulationSingleton;
-import com.example.celestial3d.VerticalWindow;
-import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
-
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class InstructionWindow extends TabPane {

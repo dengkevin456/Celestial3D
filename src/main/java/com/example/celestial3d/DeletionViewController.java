@@ -2,15 +2,12 @@ package com.example.celestial3d;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleListProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
-
 import java.util.Optional;
 
 public class DeletionViewController {

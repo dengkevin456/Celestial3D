@@ -11,6 +11,9 @@ public class SettingsController {
     private CheckBox enableCartesianPlaneCheckBox;
     @FXML
     private Slider fovSlider;
+
+    @FXML
+    private Slider gravityScaleSlider;
     @FXML
     public void initialize() {
         SimulationSingleton.getInstance().enableTrailVisualizer.bind(planetTrailCheckBox.selectedProperty());
@@ -19,5 +22,9 @@ public class SettingsController {
         fovSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             SimulationSingleton.getInstance().cameraFOV.setValue(newValue);
         });
+
+        gravityScaleSlider.valueProperty().addListener(((observable, oldValue, newValue) -> {
+             Constants.G = 0.0001 * newValue.doubleValue();
+        }));
     }
 }
